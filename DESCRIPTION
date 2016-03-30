@@ -1,18 +1,20 @@
 Package: aws.code
 Type: Package
 Title: AWS Code-Commit/-Deploy/-Pipeline Client Package
-Version: 0.1.8
-Date: 2016-03-28
+Version: 0.1.2
+Date: 2016-03-30
 Author: Thomas J. Leeper
 Maintainer: Thomas J. Leeper <thosjleeper@gmail.com>
-Description: A simple client package for the Amazon Web Services AWS CodeCommit, CodeDeploy, and CodePipeline REST APIs.
+Description: A simple client package for the Amazon Web Services AWS CodeCommit,
+    CodeDeploy, and CodePipeline REST APIs.
 License: GPL (>= 2)
 Imports:
     aws.signature,
     httr,
     xml2
 Suggests:
+    git2r,
     testthat
 URL: https://github.com/cloudyr/aws.code
 BugReports: https://github.com/cloudyr/aws.code/issues
-RoxygenNote: 5.0.1
+RoxygenNote: 5.0.1.9000
