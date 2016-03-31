@@ -14,3 +14,6 @@ after_success:
 - Rscript -e 'library("covr");codecov()'
 - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && bash
   drat.sh
+env:
+  global:
+    secure: WBDZlQDkRR6kCmpgtFVADdLtaUYxHyh5GBbLZl2fxRnThrzF6scFesZ5QBBckTkoKbicLNfrZUFjIdjcKoAmLxbDcNqHPcKrndmZ0RoSIXpJ/dTGr+Hqsglj7fR/EUFw54mOgAQw0naRq3TAfEZ2zEKmIoMdPrCxCR/mWubePMMqzjJZ/bAoo/GNOqTL4P9AHZ60aBEia750wKUd1x1uSnDPnQWG5av7mHnmk3tqCRrZpkhu9t8nv3Ck93/B7lGlbTaoxY2PJ7iNmT+ZBiPigGVUgvnuGTQHZhEkTt3QaH2xWw9BGwgHZDnaztD1AWnKEkTtr0zbu1vehXwHiX7H+0IJ+LlKY1AG3BLL5RX8VqIjUyDzhoMo48Hr7O7LlfwfMLM0J6JqUrvCl8ccal/Fu8Fy6NRq3otmAAsNwF0HoHSOGkypmzKj+meQ6i3AeZYB0ggErnWeUsJUVvcgkiNW1H5kzaYo8S3cCUZIjaGttyu43PlHvO485mxQJZWiSHIaBCeU/CvhFD5ocd4MPTVhZnZlk7r8lSRxQfgkLJ3O+2hRD1B0mkmTP/NVMAclMitk7yETCiDTjbb4zpNoaPpSqFVcjXWwQuXm8KZxH32SnOTfpyzQH8cKPl3zlSmyFFEYNaGcJpZnaUD2Y9JYuqqRr0xr1LLOuxjftXQUBGVnePo=

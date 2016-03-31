@@ -28,7 +28,7 @@ delete_repo(repo, ...)
 
 \item{description}{A character string specifying a repository description.}
 
-\item{commit}{A character string specifying a commitId (SHA), or an object of class \dQuote{aws_repo_commit}.}
+\item{repo}{A character string specifying a repository name, or an object of class \dQuote{aws_repo}.}
 
 \item{\dots}{Additional arguments passed to \code{\link{awscodeHTTP}}.}
 }
