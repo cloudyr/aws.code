@@ -4,7 +4,6 @@
 #' @template repo
 #' @param name A character string specifying a repository name.
 #' @param description A character string specifying a repository description.
-#' @template repo 
 #' @param sort One of \dQuote{repositoryName} or \dQuote{lastModifiedDate}.
 #' @param order One of \dQuote{ascending} or \dQuote{descending}.
 #' @param token A pagination token.
