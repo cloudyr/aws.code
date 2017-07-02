@@ -1,20 +1,40 @@
 language: r
 sudo: false
 cache: packages
+matrix:
+  include:
+    - os: linux
+      dist: precise
+      sudo: false
+      r_build_args: '--no-build-vignettes'
+      r_check_args: '--ignore-vignettes --no-examples'
+    - os: linux
+      dist: trusty
+      sudo: required
+      env: R_CODECOV=true
+    - os: osx
+      osx_image: xcode8.2
+      before_install:
+        - brew install curl
+        - brew link --force curl
+      latex: false
+      r_build_args: '--no-build-vignettes'
+      r_check_args: '--ignore-vignettes --no-examples'
+    - os: osx
+      osx_image: xcode7.3
+      latex: false
+      r_build_args: '--no-build-vignettes'
+      r_check_args: '--ignore-vignettes --no-examples'
 r_packages:
-- knitr
 - covr
 - drat
-after_failure:
-  email:
-    recipients:
-    - thosjleeper@gmail.com
-    on_success: change
-    on_failure: change
+r_github_packages:
+- cloudyr/travisci
 after_success:
 - Rscript -e 'library("covr");codecov()'
 - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && bash
   drat.sh
+- Rscript -e "travisci::restart_last_build('cloudyr/awspack')"
 env:
   global:
     secure: CqpX/DbiEpi2qLuMu8N+SXlLbnt4Usv6CeZfm54gpiSK7dhso851kJYEvYt+8Lu4osFmCF8qQQ8EFVZSnoHRy7G74jylHo3A9/0xNwX1a3CcO+9FXpDcn7mZkD8zpZD8KLCH7OzEyz1FqA9W6jqPbXFtAd+Nj0hIxAft57iMFTOHc/MR+Ga1Ek1IhI8T4Zgj9ecLhRToEY9P5+AiJn3nOfVyItMbeloY6c3iPaJg/swIfX2+2zB/LN4J5o0ydy2uheC40MgsGqOZNZ1T8c+v8GOAFu7A162jh/lDEh0igKp5meSU/p7QgS0rxsttGqlytq/dZsRLb/F2pnLW0t4+5vk9esSbI4gTz1CvNc1SRW1dQfWdYdPRvMtGpx4k+XhnKwTaaK477HIy160j8KcfdU5ElUraTDVuCZ1npRR6viUKBuGFVqFOCi1WFiEefpRBqRLyQ+iMktzBpYp+BzlbbOS6WYFvgYxPBjWQ0n5Dh2Dj/UJEoUvItZRqIzZZB6MGb2+WIgqeSTnHilED05JQ44r99vHWHGNW6bTdSMge19XXRd3jGG1NwGPmIThlEqpaL/3jdfXI2PqTELddUtjcT3BwUJvpkoF6XdHJJ7WirJ33WYzMbZXfgM4ID5mQH1NtxQJvFmZ1YG0Ek+RcxNNsyiKPl2Nxs9Q272z/1k/UqgE=
