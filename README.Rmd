@@ -33,10 +33,11 @@ install.packages("aws.code", repos = c(getOption("repos"), "http://cloudyr.githu
 Or, to pull a potentially unstable version directly from GitHub:
 
 ```R
-if(!require("ghit")){
-    install.packages("ghit")
+if(!require("remotes")){
+if(!require("remotes")){
+    install.packages("remotes")
 }
-ghit::install_github("cloudyr/aws.code")
+remotes::install_github("cloudyr/aws.code")
 ```
 
 
