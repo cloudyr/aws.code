@@ -3,26 +3,26 @@ sudo: false
 cache: packages
 matrix:
   include:
-    - os: linux
-      dist: trusty
-      sudo: required
-      env: R_CODECOV=true
-    - os: osx
-      osx_image: xcode9.2
-    - os: osx
-      osx_image: xcode7.3
-      r_build_args: '--no-build-vignettes'
-      r_check_args: '--ignore-vignettes --no-examples'
+  - os: linux
+    dist: trusty
+    sudo: required
+    env: DRAT_DEPLOY=true
+  - os: osx
+    osx_image: xcode9.2
+  - os: osx
+    osx_image: xcode7.3
+    r_build_args: "--no-build-vignettes"
+    r_check_args: "--ignore-vignettes --no-examples"
 r_packages:
 - covr
 - drat
 r_github_packages:
 - cloudyr/travisci
 after_success:
-- Rscript -e 'library("covr");codecov()'
-- test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && bash
-  drat.sh
-- Rscript -e "travisci::restart_last_build('cloudyr/awspack')"
+- R -q -e 'library("covr");codecov()'
+- test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && test
+  $DRAT_DEPLOY == "true" && bash drat.sh
+- R -q -e "travisci::restart_last_build('cloudyr/awspack')"
 env:
   global:
-    secure: CqpX/DbiEpi2qLuMu8N+SXlLbnt4Usv6CeZfm54gpiSK7dhso851kJYEvYt+8Lu4osFmCF8qQQ8EFVZSnoHRy7G74jylHo3A9/0xNwX1a3CcO+9FXpDcn7mZkD8zpZD8KLCH7OzEyz1FqA9W6jqPbXFtAd+Nj0hIxAft57iMFTOHc/MR+Ga1Ek1IhI8T4Zgj9ecLhRToEY9P5+AiJn3nOfVyItMbeloY6c3iPaJg/swIfX2+2zB/LN4J5o0ydy2uheC40MgsGqOZNZ1T8c+v8GOAFu7A162jh/lDEh0igKp5meSU/p7QgS0rxsttGqlytq/dZsRLb/F2pnLW0t4+5vk9esSbI4gTz1CvNc1SRW1dQfWdYdPRvMtGpx4k+XhnKwTaaK477HIy160j8KcfdU5ElUraTDVuCZ1npRR6viUKBuGFVqFOCi1WFiEefpRBqRLyQ+iMktzBpYp+BzlbbOS6WYFvgYxPBjWQ0n5Dh2Dj/UJEoUvItZRqIzZZB6MGb2+WIgqeSTnHilED05JQ44r99vHWHGNW6bTdSMge19XXRd3jGG1NwGPmIThlEqpaL/3jdfXI2PqTELddUtjcT3BwUJvpkoF6XdHJJ7WirJ33WYzMbZXfgM4ID5mQH1NtxQJvFmZ1YG0Ek+RcxNNsyiKPl2Nxs9Q272z/1k/UqgE=
+    secure: dCQPTjrro++XWmZab9thzlcvdIngvxOgv50aeJeyg6STHL3aSXz+guHKHUvSdxzg4p3+5bK6PGiQ+PwhlDmWHcxWHcYbZWX+/j2teS39XmgqeW1WmBjHr/lHVGDxh41tGmqbFXwCrgtqsUlq7FHbz/fkDiv4cBIjg1fgMn+N6WMufItdAhz4ATJkYSi22SCds4DzR2Nvzji5okYzoOVgok9qCbC9WA4Bne04Km2mOdZQ8bnbgSo0+KLktjv5Ox3hwpd1ElW1oyaMtqeGy6poH9cxyyctyvNAlNO10kRwQzYyy04xGkQk0astm+5VFfoysMISIwoT4vJngKYRAROPJXfcFb7QS8aq3OJptDlqvCFXB3tlDoThxNRDsCwCeKdtETRGDWSldlNf8fJAk/z6/Eu/IxOOdwDd6UjKlNvJCSzts+MjzPiupbkgI26lz7dRd/jYjmbb7FKYri67WWanHn2USXOA/K4PG/jRsmKqriSrF6D6H+IXCINA+cIyyTjc58BXrcA1upNWeZqoLLnyM/SpVztG7OHNDakhi/VmWxT9+WwYemQuzfhESWpGBYchHhcuj815DFi9vPdkGo+sbSYnwwVRqWj0whxTJ23xi2zSFy04GvkhP4xVhLEXk3KM1lqYPQu8oda1X/4Qyo+stIjIjFSznTWib6F0+6CZY5c=

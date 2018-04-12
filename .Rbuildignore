@@ -5,4 +5,4 @@ knitreadme.sh
 ^.*\.Rproj$
 ^\.Rproj\.user$
 man-roxygen
-^.github/
+^\.github.?
