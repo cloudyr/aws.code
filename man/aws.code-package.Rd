@@ -2,8 +2,8 @@
 % Please edit documentation in R/aws.code-package.R
 \docType{package}
 \name{aws.code-package}
-\alias{aws.code}
 \alias{aws.code-package}
+\alias{aws.code}
 \title{aws.code}
 \description{
 AWS CodeCommit/CodeDeploy/CodePipeline Client Package
@@ -15,4 +15,3 @@ A simple client package for the Amazon Web Services (AWS) CodeCommit/CodeDeploy/
 Thomas J. Leeper <thosjleeper@gmail.com>
 }
 \keyword{package}
-

@@ -2,8 +2,8 @@
 % Please edit documentation in R/CodeCommit_triggers.R
 \name{get_repo_triggers}
 \alias{get_repo_triggers}
-\alias{make_trigger}
 \alias{set_repo_triggers}
+\alias{make_trigger}
 \title{CodeCommit Repo Triggers}
 \usage{
 get_repo_triggers(repo, ...)
@@ -14,6 +14,8 @@ make_trigger(branch, name, arn, events = "all", custom_data)
 }
 \arguments{
 \item{repo}{A character string specifying a repository name, or an object of class \dQuote{aws_repo}.}
+
+\item{\dots}{Additional arguments passed to \code{\link{awscodeHTTP}}.}
 
 \item{triggers}{A list of objects of class \dQuote{aws_repo_trigger}, as created by \code{make_trigger}.}
 
@@ -26,8 +28,6 @@ make_trigger(branch, name, arn, events = "all", custom_data)
 \item{events}{Optionally, a character vector specifying one or more events of: \dQuote{all} (the default) or any of \dQuote{updateReference} (commits are pushed), \dQuote{createReference} (new branch or tag is created), or \dQuote{deleteReference} (branch or tag is deleted).}
 
 \item{custom_data}{Optionally, a character string specifying additional information to be passed with the trigger notice.}
-
-\item{\dots}{Additional arguments passed to \code{\link{awscodeHTTP}}.}
 }
 \value{
 A list.
@@ -35,4 +35,3 @@ A list.
 \description{
 Get, set, and test CodeCommit repo triggers
 }
-

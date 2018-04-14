@@ -2,27 +2,44 @@
 #' @description CodeCommit/CodeDeploy/CodePipeline HTTP Requests
 #' @param action A character string specifying an API action.
 #' @param query A named list of query string parameters.
+#' @param headers A list of headers to pass to the HTTP request.
 #' @param body A list of body (JSON) arguments.
 #' @param service A character string specifying one of \dQuote{CodeCommit}, \dQuote{CodeDeploy}, or \dQuote{CodePipeline}.
+#' @param verbose A logical indicating whether to be verbose. Default is given by \code{options("verbose")}.
 #' @param region A character string containing the AWS region. If missing, defaults to \dQuote{us-east-1}.
-#' @param key A character string containing an AWS Access Key ID. If missing, defaults to value stored in environment variable \dQuote{AWS_ACCESS_KEY_ID}.
-#' @param secret A character string containing an AWS Secret Access Key.  If missing, defaults to value stored in environment variable \dQuote{AWS_SECRET_ACCESS_KEY}.
+#' @param key A character string containing an AWS Access Key ID. See \code{\link[aws.signature]{locate_credentials}}.
+#' @param secret A character string containing an AWS Secret Access Key. See \code{\link[aws.signature]{locate_credentials}}.
+#' @param session_token A character string containing an AWS Session Token. See \code{\link[aws.signature]{locate_credentials}}.
 #' @param version A character string specifying an API version. Default is \dQuote{2015-04-13}.
-#' @param ... Additional arguments passed to \code{\link[httr]{POST}}.
+#' @param \dots Additional arguments passed to \code{\link[httr]{POST}}.
 #' @return A list
 #' @importFrom aws.signature signature_v4_auth
 #' @importFrom httr add_headers headers content warn_for_status http_status http_error POST
 #' @importFrom xml2 read_xml as_list
 #' @export
-awscodeHTTP <- function(action,
-                    query = list(), 
-                    body = list(),
-                    service = c("CodeCommit", "CodeDeploy", "CodePipeline"), 
-                    region = Sys.getenv("AWS_DEFAULT_REGION","us-east-1"), 
-                    key = Sys.getenv("AWS_ACCESS_KEY_ID"), 
-                    secret = Sys.getenv("AWS_SECRET_ACCESS_KEY"), 
-                    version = "2015-04-13",
-                    ...) {
+awscodeHTTP <- 
+function(
+  action,
+  query = list(), 
+  headers = list(),
+  body = list(),
+  service = c("CodeCommit", "CodeDeploy", "CodePipeline"), 
+  verbose = getOption("verbose", FALSE),
+  region = Sys.getenv("AWS_DEFAULT_REGION","us-east-1"), 
+  key = NULL,
+  secret = NULL,
+  session_token = NULL,
+  version = "2015-04-13",
+  ...
+) {
+    # locate and validate credentials
+    credentials <- locate_credentials(key = key, secret = secret, session_token = session_token, region = region, verbose = verbose)
+    key <- credentials[["key"]]
+    secret <- credentials[["secret"]]
+    session_token <- credentials[["session_token"]]
+    region <- credentials[["region"]]
+    
+    # generate request signature
     service2 <- tolower(match.arg(service))
     query$Version <- version
     if (region == "us-east-1") {
@@ -31,7 +48,7 @@ awscodeHTTP <- function(action,
         url <- paste0("https://",service2,".",region,".amazonaws.com")
     }
     d_timestamp <- format(Sys.time(), "%Y%m%dT%H%M%SZ", tz = "UTC")
-    S <- signature_v4_auth(
+    Sig <- signature_v4_auth(
            datetime = d_timestamp,
            region = region,
            service = service,
@@ -46,10 +63,20 @@ awscodeHTTP <- function(action,
                                     `X-Amz-Date` = d_timestamp,
                                     `X-Amz-Target` = paste0(service, "_", gsub("-", "", version), action)),
            request_body = "",
-           key = key, secret = secret)
-    H <- add_headers(`X-Amz-Date` = d_timestamp, 
-                     `X-Amz-Target` = paste0(service, "_", gsub("-", "", version), action),
-                     Authorization = S$SignatureHeader)
+           key = key,
+           secret = secret,
+           session_token = session_token,
+           verbose = verbose)
+    # setup request headers
+    headers[["X-Amz-Date"]] <- d_timestamp
+    headers[["X-Amz-Target"]] <- paste0(service, "_", gsub("-", "", version), action)
+    headers[["Authorization"]] <- Sig[["SignatureHeader"]]
+    if (!is.null(session_token) && session_token != "") {
+        headers[["x-amz-security-token"]] <- session_token
+    }
+    H <- do.call(add_headers, headers)
+    
+    # execute request
     if (length(query)) {
         r <- POST(url, H, body = body, encode = "json", query = query, ...)
     } else {

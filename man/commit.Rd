@@ -19,4 +19,3 @@ A list.
 \description{
 Get CodeCommit repo commit
 }
-
